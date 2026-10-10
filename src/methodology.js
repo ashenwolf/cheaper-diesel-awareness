@@ -19,14 +19,28 @@ const rows = [
   { label: "State take", path: ["russia", "stateTake"], format: (p) => `${p.value * 100}% (${p.low * 100} to ${p.high * 100}%)` },
   { label: "Russian oil and gas revenue", path: ["russia", "oilGasRevenueMonth"], format: (p) => `$${(p.value / 1e9).toFixed(2)} bn/month` },
   { label: "Drone unit cost", path: ["drones", "unitCost"], format: (p) => `$${p.value / 1000}k ($${p.low / 1000}k to $${p.high / 1000}k)` },
-  { label: "Drones launched (reference month)", path: ["harm", "longRangeLaunches"], format: (p) => p.value.toLocaleString("en-GB") },
-  { label: "Killed by long-range weapons", path: ["harm", "longRangeKilled"], format: (p) => String(p.value) },
-  { label: "Injured by long-range weapons", path: ["harm", "longRangeInjured"], format: (p) => String(p.value) },
   { label: "Drone share of long-range casualties", path: ["harm", "droneShare"], format: (p) => `${p.value * 100}% (${p.low * 100} to ${p.high * 100}%)` },
-  { label: "Child share of killed", path: ["harm", "childShareKilled"], format: (p) => `${(p.value * 100).toFixed(1)}%` },
-  { label: "Child share of injured", path: ["harm", "childShareInjured"], format: (p) => `${(p.value * 100).toFixed(1)}%` },
-  { label: "Latest month, all weapons", path: ["harm", "latestMonth"], format: (p) => `${p.killed} killed, ${p.injured} injured` },
 ];
+
+const monthFields = [
+  { key: "launches", label: "drones launched" },
+  { key: "killed", label: "civilians killed, all weapons" },
+  { key: "injured", label: "civilians injured, all weapons" },
+  { key: "longRangeKilled", label: "killed by long-range weapons" },
+  { key: "longRangeInjured", label: "injured by long-range weapons" },
+  { key: "childrenKilled", label: "children killed" },
+  { key: "childrenInjured", label: "children injured" },
+];
+
+// One table row per month and field, so every casualty figure shows its own source.
+const monthRows = (params) =>
+  params.harm.months.flatMap((month, i) =>
+    monthFields.map((field) => ({
+      label: `${month.label}: ${field.label}`,
+      path: ["harm", "months", i, field.key],
+      format: (p) => (p.value == null ? "Not published" : p.value.toLocaleString("en-GB")),
+    })),
+  );
 
 const at = (object, path) => path.reduce((node, key) => node[key], object);
 
@@ -36,10 +50,13 @@ const cell = (content) => {
   return td;
 };
 
-const badge = (verified) =>
+const statusText = (param) =>
+  param.derived ? "Derived" : param.value == null ? "Missing" : param.verified ? "Sourced" : "Assumption";
+
+const badge = (param) =>
   Object.assign(document.createElement("span"), {
     className: "badge",
-    textContent: verified ? "Sourced" : "Assumption",
+    textContent: statusText(param),
   });
 
 const sourceNodes = (param) => {
@@ -52,8 +69,8 @@ const sourceNodes = (param) => {
 const rowNode = (params, row) => {
   const param = at(params, row.path);
   const tr = document.createElement("tr");
-  const status = badge(param.verified);
-  status.dataset.verified = String(param.verified);
+  const status = badge(param);
+  status.dataset.verified = String(param.verified && !param.derived);
   const th = Object.assign(document.createElement("th"), { scope: "row", textContent: row.label });
   tr.append(th, cell(row.format(param)), cell(status), cell(sourceNodes(param)));
   return tr;
@@ -62,6 +79,7 @@ const rowNode = (params, row) => {
 fetch("data/params.json")
   .then((response) => response.json())
   .then((params) => {
-    document.getElementById("param-rows").replaceChildren(...rows.map((row) => rowNode(params, row)));
+    const allRows = [...rows, ...monthRows(params)];
+    document.getElementById("param-rows").replaceChildren(...allRows.map((row) => rowNode(params, row)));
     document.getElementById("param-version").textContent = params.version;
   });

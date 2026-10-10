@@ -22,9 +22,34 @@ const boundFor = (name, scenario) =>
 
 const pick = (param, name, scenario) => param[boundFor(name, scenario)] ?? param.value;
 
+const RATE_FIELDS = ["launches", "longRangeKilled", "longRangeInjured"];
+const CHILD_FIELDS = ["killed", "injured", "childrenKilled", "childrenInjured"];
+
+const hasAll = (fields) => (month) => fields.every((field) => month[field]?.value != null);
+const total = (months, field) => months.reduce((sum, month) => sum + month[field].value, 0);
+
+const periodLabel = (months) =>
+  months.length === 1 ? months[0].label : `${months[0].short} to ${months.at(-1).label}`;
+
+/** Monthly averages over every month with complete data; incomplete months are reported, not guessed. */
+export const poolHarm = (months) => {
+  const rated = months.filter(hasAll(RATE_FIELDS));
+  const withChildren = months.filter(hasAll(CHILD_FIELDS));
+  return {
+    launches: total(rated, "launches") / rated.length,
+    killedRef: total(rated, "longRangeKilled") / rated.length,
+    injuredRef: total(rated, "longRangeInjured") / rated.length,
+    childShareKilled: total(withChildren, "childrenKilled") / total(withChildren, "killed"),
+    childShareInjured: total(withChildren, "childrenInjured") / total(withChildren, "injured"),
+    period: periodLabel(rated),
+    pending: months.filter((month) => !hasAll(RATE_FIELDS)(month)).map((month) => month.label),
+  };
+};
+
 /** Flattens params.json into the numbers one scenario needs. */
 export const resolveInputs = (params, regionId, fuel, scenario) => {
   const region = params.regions[regionId];
+  const harm = poolHarm(params.harm.months);
   return {
     pumpPrice: region.prices[fuel].value,
     vat: region.vat.value,
@@ -40,12 +65,12 @@ export const resolveInputs = (params, regionId, fuel, scenario) => {
     maxExtraSupply: pick(params.russia.maxExtraSupply, "maxExtraSupply", scenario),
     stateTake: pick(params.russia.stateTake, "stateTake", scenario),
     unitCost: pick(params.drones.unitCost, "unitCost", scenario),
-    launches: params.harm.longRangeLaunches.value,
-    killedRef: params.harm.longRangeKilled.value,
-    injuredRef: params.harm.longRangeInjured.value,
+    launches: harm.launches,
+    killedRef: harm.killedRef,
+    injuredRef: harm.injuredRef,
     droneShare: pick(params.harm.droneShare, "droneShare", scenario),
-    childShareKilled: params.harm.childShareKilled.value,
-    childShareInjured: params.harm.childShareInjured.value,
+    childShareKilled: harm.childShareKilled,
+    childShareInjured: harm.childShareInjured,
   };
 };
 

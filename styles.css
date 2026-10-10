@@ -157,6 +157,21 @@ a {
   outline-offset: 2px;
 }
 
+.sign__label {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin: 0.75rem 0 0;
+  font-family: var(--font-sign);
+  font-weight: 600;
+  font-size: var(--step-1);
+}
+
+.sign__list {
+  color: #d6e0f5;
+  text-decoration-thickness: 2px;
+}
+
 .sign__price {
   display: flex;
   align-items: baseline;
@@ -249,6 +264,14 @@ a {
   border-radius: 50%;
   background: var(--signal-yellow);
   border: 3px solid var(--ink);
+}
+
+.pump__scale {
+  display: flex;
+  justify-content: space-between;
+  margin: -0.25rem 0 0.75rem;
+  font-size: var(--step--1);
+  color: var(--ink-soft);
 }
 
 .pump__saving {

@@ -31,21 +31,29 @@ const renderSign = (sign) => {
   bind("currency").textContent = sign.currencySymbol;
   bind("price").textContent = sign.price;
   bind("unit").textContent = sign.unit;
+  bind("priceLabel").textContent = sign.discounted ? "Your price" : "Pump price today";
+  bind("listPrice").textContent = sign.discounted ? sign.listPrice : "";
+  $(".sign").dataset.discounted = String(sign.discounted);
   bind("regionLabel").textContent = sign.regionLabel;
   bind("asOf").textContent = sign.asOf;
   bind("source").textContent = sign.sourceLabel;
   bind("source").href = sign.sourceUrl;
 };
 
+// The input runs reversed: far right = today's price, moving left = cheaper.
+const positionFor = (slider) => slider.max - slider.steps;
+
+const stepsFromInput = (input) => Number(input.max) - Number(input.value);
+
 const renderSlider = (slider) => {
   const input = $("#saving");
   input.max = String(slider.max);
-  input.value = String(slider.value);
-  input.style.setProperty("--fill", `${(slider.value / slider.max) * 100}%`);
+  input.value = String(positionFor(slider));
+  input.style.setProperty("--fill", `${(positionFor(slider) / slider.max) * 100}%`);
 };
 
 const renderSaving = (saving) => {
-  bind("perUnit").textContent = saving.isZero ? "Drag to save" : `You save ${saving.perUnit}`;
+  bind("perUnit").textContent = saving.isZero ? "Drag left to save" : `You save ${saving.perUnit}`;
   bind("perTank").textContent = saving.isZero ? "" : `That is ${saving.perTank}.`;
 };
 
@@ -70,6 +78,7 @@ const render = (params, state) => {
   const view = buildView(params, state);
   renderSign(view.sign);
   renderSlider(view.slider);
+  $("#saving").setAttribute("aria-valuetext", `${view.sign.currencySymbol}${view.sign.price} ${view.sign.unit}`);
   renderSaving(view.saving);
   renderReceipt(view);
   document.body.dataset.share = view.shareText;
@@ -106,7 +115,7 @@ const start = (params) => {
   const read = (overrides = {}) => ({
     regionId: $('input[name="region"]:checked').value,
     fuel: $('input[name="fuel"]:checked').value,
-    steps: Number($("#saving").value),
+    steps: stepsFromInput($("#saving")),
     ...overrides,
   });
   const update = (state) => {

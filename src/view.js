@@ -2,7 +2,7 @@
  * Producer for the page: turns params + UI state into a plain view model.
  * The DOM layer only reads these fields.
  */
-import { runRange } from "./model.js";
+import { poolHarm, runRange } from "./model.js";
 
 const MAX_DISCOUNT_SHARE = 0.3;
 
@@ -12,6 +12,8 @@ const unitWords = {
 };
 
 const fuelWords = { diesel: "Diesel", petrol: "Petrol" };
+
+const currencySymbols = { EUR: "€", USD: "$" };
 
 const formatDate = (iso) =>
   new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric" }).format(new Date(iso));
@@ -32,8 +34,7 @@ const range = (fmt) => (lo, hi) => (fmt(lo) === fmt(hi) ? fmt(lo) : `${fmt(lo)} 
 const cappedRange = (lo, hi, observed) =>
   hi > observed ? `${whole(lo)} to ${whole(observed)}+` : range(whole)(lo, hi);
 
-const childRange = (lo, hi, observedShare, observed) => cappedRange(lo, hi, observed * observedShare);
-
+/** Slider positions: 0 = no discount; the DOM shows them reversed so the thumb starts on the right. */
 export const sliderSpec = (params, regionId, fuel) => {
   const region = params.regions[regionId];
   const price = region.prices[fuel].value;
@@ -41,15 +42,18 @@ export const sliderSpec = (params, regionId, fuel) => {
   return { min: 0, max: steps, step: 1, unitStep: region.step };
 };
 
-const signView = (params, regionId, fuel) => {
+const signView = (params, regionId, fuel, saving) => {
   const region = params.regions[regionId];
   const price = region.prices[fuel];
+  const fmt = money(region.locale, region.currency);
   return {
     fuelLabel: fuelWords[fuel],
     regionLabel: region.label,
-    price: price.value.toFixed(2),
-    currencySymbol: region.currency === "EUR" ? "€" : "$",
+    price: (price.value - saving).toFixed(2),
+    currencySymbol: currencySymbols[region.currency],
     unit: `per ${unitWords[region.unit].one}`,
+    listPrice: fmt(price.value),
+    discounted: saving > 0,
     asOf: formatDate(price.asOf),
     sourceLabel: price.source.label,
     sourceUrl: price.source.url,
@@ -65,52 +69,43 @@ const savingView = (region, saving, perTank) => {
   };
 };
 
-const receiptLines = (params, region, { low, high }) => {
-  const harm = params.harm;
-  const droneToll = (n) => n.value * harm.droneShare.value;
-  const killedObserved = droneToll(harm.longRangeKilled);
-  const injuredObserved = droneToll(harm.longRangeInjured);
-  return [
-    { label: "Your saving per tank", value: money(region.locale, region.currency)(low.perTank) },
-    { label: "Extra oil let in from Russia", value: `${range(oneDecimal)(low.supplied, high.supplied)} m barrels a day` },
-    { label: "Extra money for the Kremlin budget", value: `${range(billions)(low.revenue, high.revenue)} a month` },
-    { label: "Enough to pay for Shahed drones", value: range(whole)(low.drones, high.drones), tone: "loud" },
-    {
-      label: `Civilians killed, at ${harm.referenceMonth}'s rate`,
-      value: cappedRange(low.killed, high.killed, killedObserved),
-      tone: "harm",
-    },
-    { label: "Civilians injured", value: cappedRange(low.injured, high.injured, injuredObserved), tone: "harm" },
-    {
-      label: "Of them, children killed",
-      value: childRange(low.childrenKilled, high.childrenKilled, harm.childShareKilled.value, killedObserved),
-      tone: "harm",
-    },
-    {
-      label: "Of them, children injured",
-      value: childRange(low.childrenInjured, high.childrenInjured, harm.childShareInjured.value, injuredObserved),
-      tone: "harm",
-    },
-  ].map((line, i) => ({ ...line, id: `line-${i}` }));
+// What drones actually caused in an average month of the period: the cap for every casualty line.
+const observedToll = (params) => {
+  const pooled = poolHarm(params.harm.months);
+  const share = params.harm.droneShare.value;
+  const killed = pooled.killedRef * share;
+  const injured = pooled.injuredRef * share;
+  return {
+    ...pooled,
+    killed,
+    injured,
+    childrenKilled: killed * pooled.childShareKilled,
+    childrenInjured: injured * pooled.childShareInjured,
+  };
 };
 
-const receiptNotes = (params, regionId, { low, central, high }) => {
-  const region = params.regions[regionId];
-  const harm = params.harm;
-  const fmt = money(region.locale, region.currency);
-  const killedObserved = whole(harm.longRangeKilled.value * harm.droneShare.value);
-  return [
-    high.campaignMultiple > 1
-      ? `The upper estimate pays for ${oneDecimal(high.campaignMultiple)} times every drone Russia launched in ${harm.referenceMonth}. ` +
-        `That month, drones killed about ${killedObserved} civilians. We do not extrapolate beyond the real toll.`
-      : null,
-    central.capped
-      ? `Russia cannot pump that much. Past about ${fmt(capSaving(params, regionId))} per ${unitWords[region.unit].one}, ` +
-        "the rest of your discount would need someone else's oil."
-      : null,
-    low.revenue <= 0 ? "On these numbers Russia earns nothing extra. Enjoy it, it is rare." : null,
-  ].filter(Boolean);
-};
+const receiptLines = (region, toll, { low, high }) => [
+  { label: "Your saving per tank", value: money(region.locale, region.currency)(low.perTank) },
+  { label: "Extra oil let in from Russia", value: `${range(oneDecimal)(low.supplied, high.supplied)} m barrels a day` },
+  { label: "Extra money for the Kremlin budget", value: `${range(billions)(low.revenue, high.revenue)} a month` },
+  { label: "Enough to pay for Shahed drones", value: range(whole)(low.drones, high.drones), tone: "loud" },
+  {
+    label: `Civilians killed, at the ${toll.period} rate`,
+    value: cappedRange(low.killed, high.killed, toll.killed),
+    tone: "harm",
+  },
+  { label: "Civilians injured", value: cappedRange(low.injured, high.injured, toll.injured), tone: "harm" },
+  {
+    label: "Of them, children killed",
+    value: cappedRange(low.childrenKilled, high.childrenKilled, toll.childrenKilled),
+    tone: "harm",
+  },
+  {
+    label: "Of them, children injured",
+    value: cappedRange(low.childrenInjured, high.childrenInjured, toll.childrenInjured),
+    tone: "harm",
+  },
+].map((line, i) => ({ ...line, id: `line-${i}` }));
 
 // Saving at which needed supply hits the central Russian cap: invert steps 1 and 2.
 const capSaving = (params, regionId) => {
@@ -118,6 +113,26 @@ const capSaving = (params, regionId) => {
   const { oil, russia } = params;
   const crudeDrop = (russia.maxExtraSupply.value * oil.priceFlexibility.value * oil.brent.value) / oil.worldSupply.value;
   return (crudeDrop * (1 + region.vat.value)) / (region.fx.value * region.unitsPerBarrel);
+};
+
+const receiptNotes = (params, regionId, toll, { low, central, high }) => {
+  const region = params.regions[regionId];
+  const fmt = money(region.locale, region.currency);
+  return [
+    high.campaignMultiple > 1
+      ? `The upper estimate pays for ${oneDecimal(high.campaignMultiple)} times the drones Russia launches in an average month ` +
+        `(${toll.period}). In such a month, drones killed about ${whole(toll.killed)} civilians. ` +
+        "We do not extrapolate beyond the real toll."
+      : null,
+    central.capped
+      ? `Russia cannot pump that much. Past about ${fmt(capSaving(params, regionId))} per ${unitWords[region.unit].one}, ` +
+        "the rest of your discount would need someone else's oil."
+      : null,
+    low.revenue <= 0 ? "On these numbers Russia earns nothing extra. Enjoy it, it is rare." : null,
+    toll.pending.length > 0
+      ? `Casualty rate covers ${toll.period}. ${toll.pending.join(", ")} will be added once a monthly drone count is published.`
+      : null,
+  ].filter(Boolean);
 };
 
 const shareText = (region, sign, saving, lines) =>
@@ -131,15 +146,16 @@ export const buildView = (params, { regionId, fuel, steps }) => {
   const region = params.regions[regionId];
   const saving = Math.round(steps * region.step * 100) / 100;
   const results = runRange(params, regionId, fuel, saving);
-  const sign = signView(params, regionId, fuel);
+  const toll = observedToll(params);
+  const sign = signView(params, regionId, fuel, saving);
   const savingText = savingView(region, saving, results.low.perTank);
-  const lines = receiptLines(params, region, results);
+  const lines = receiptLines(region, toll, results);
   return {
     sign,
-    slider: { ...sliderSpec(params, regionId, fuel), value: steps },
+    slider: { ...sliderSpec(params, regionId, fuel), steps },
     saving: savingText,
     lines,
-    notes: saving > 0 ? receiptNotes(params, regionId, results) : [],
+    notes: saving > 0 ? receiptNotes(params, regionId, toll, results) : [],
     shareText: shareText(region, sign, savingText, lines),
     printed: saving > 0,
   };

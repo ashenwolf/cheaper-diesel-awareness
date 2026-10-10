@@ -23,18 +23,24 @@
       },
       "prices": {
         "diesel": {
-          "value": 2.10,
+          "value": 2.1,
           "asOf": "2026-10-05",
           "verified": true,
           "note": "Simple average of 27 national averages, EU Weekly Oil Bulletin.",
-          "source": { "label": "fuel-prices.eu, from the EC Weekly Oil Bulletin", "url": "https://www.fuel-prices.eu/news/weekly/europe-fuel-prices-week-2026-10-05/" }
+          "source": {
+            "label": "fuel-prices.eu, from the EC Weekly Oil Bulletin",
+            "url": "https://www.fuel-prices.eu/news/weekly/europe-fuel-prices-week-2026-10-05/"
+          }
         },
         "petrol": {
           "value": 1.93,
           "asOf": "2026-10-05",
           "verified": true,
           "note": "Euro-super 95, simple average of 27 national averages, EU Weekly Oil Bulletin.",
-          "source": { "label": "fuel-prices.eu, from the EC Weekly Oil Bulletin", "url": "https://www.fuel-prices.eu/news/weekly/europe-fuel-prices-week-2026-10-05/" }
+          "source": {
+            "label": "fuel-prices.eu, from the EC Weekly Oil Bulletin",
+            "url": "https://www.fuel-prices.eu/news/weekly/europe-fuel-prices-week-2026-10-05/"
+          }
         }
       }
     },
@@ -46,22 +52,38 @@
       "unitsPerBarrel": 42,
       "tankSize": 13,
       "step": 0.05,
-      "vat": { "value": 0, "verified": true, "note": "US fuel taxes are per gallon, so they drop out of the change.", "source": null },
-      "fx": { "value": 1, "verified": true, "note": "Prices are already in USD.", "source": null },
+      "vat": {
+        "value": 0,
+        "verified": true,
+        "note": "US fuel taxes are per gallon, so they drop out of the change.",
+        "source": null
+      },
+      "fx": {
+        "value": 1,
+        "verified": true,
+        "note": "Prices are already in USD.",
+        "source": null
+      },
       "prices": {
         "diesel": {
           "value": 6.29,
           "asOf": "2026-09-30",
           "verified": true,
           "note": "No. 2 diesel, September 2026 monthly average, an all-time high.",
-          "source": { "label": "US Bureau of Transportation Statistics", "url": "https://www.bts.gov/newsroom/motor-fuel-prices-september-2026-0" }
+          "source": {
+            "label": "US Bureau of Transportation Statistics",
+            "url": "https://www.bts.gov/newsroom/motor-fuel-prices-september-2026-0"
+          }
         },
         "petrol": {
           "value": 4.36,
           "asOf": "2026-09-30",
           "verified": true,
           "note": "Regular gasoline, September 2026 monthly average.",
-          "source": { "label": "US Bureau of Transportation Statistics", "url": "https://www.bts.gov/newsroom/motor-fuel-prices-september-2026-0" }
+          "source": {
+            "label": "US Bureau of Transportation Statistics",
+            "url": "https://www.bts.gov/newsroom/motor-fuel-prices-september-2026-0"
+          }
         }
       }
     }
@@ -71,7 +93,10 @@
       "value": 100,
       "verified": false,
       "note": "Approximate Brent price around 9 October 2026, read from a prediction market, not a settlement. Replace with an EIA or ICE settlement.",
-      "source": { "label": "Kalshi Brent market, 9 Oct 2026", "url": "https://kalshi.com/markets/kxbrentw/brent-oil/kxbrentw-26oct0917" }
+      "source": {
+        "label": "Kalshi Brent market, 9 Oct 2026",
+        "url": "https://kalshi.com/markets/kxbrentw/brent-oil/kxbrentw-26oct0917"
+      }
     },
     "worldSupply": {
       "value": 104,
@@ -95,21 +120,30 @@
       "unit": "mb/d",
       "verified": true,
       "note": "Seaborne crude 4.088 + seaborne products 1.075 mb/d, September 2026. Pipeline exports are excluded for lack of a sourced figure. They would also earn less at a lower world price, so leaving them out overstates the revenue gain somewhat.",
-      "source": { "label": "S&P Global, 5 Oct 2026", "url": "https://www.spglobal.com/energy/en/news-research/latest-news/refined-products/100526-russia-september-crude-exports-rise-8-on-month-despite-fresh-sanctions" }
+      "source": {
+        "label": "S&P Global, 5 Oct 2026",
+        "url": "https://www.spglobal.com/energy/en/news-research/latest-news/refined-products/100526-russia-september-crude-exports-rise-8-on-month-despite-fresh-sanctions"
+      }
     },
     "discountNow": {
       "value": 22,
       "unit": "$/bbl",
       "verified": true,
       "note": "Urals discount to Brent assumed in the Russian Economy Ministry 2026 scenario.",
-      "source": { "label": "Expert.ru", "url": "https://expert.ru/analitika/tarifnye-voiny/pochemu-skidka-na-rossiyskuyu-neft-brent-vyrosla-vyshe-20" }
+      "source": {
+        "label": "Expert.ru",
+        "url": "https://expert.ru/analitika/tarifnye-voiny/pochemu-skidka-na-rossiyskuyu-neft-brent-vyrosla-vyshe-20"
+      }
     },
     "discountRelief": {
       "value": 13.4,
       "unit": "$/bbl",
       "verified": true,
       "note": "Actual average Urals discount in 2025, used as the discount after sanctions relief.",
-      "source": { "label": "Expert.ru", "url": "https://expert.ru/analitika/tarifnye-voiny/pochemu-skidka-na-rossiyskuyu-neft-brent-vyrosla-vyshe-20" }
+      "source": {
+        "label": "Expert.ru",
+        "url": "https://expert.ru/analitika/tarifnye-voiny/pochemu-skidka-na-rossiyskuyu-neft-brent-vyrosla-vyshe-20"
+      }
     },
     "maxExtraSupply": {
       "value": 1.5,
@@ -129,10 +163,13 @@
       "source": null
     },
     "oilGasRevenueMonth": {
-      "value": 5.43e9,
+      "value": 5430000000.0,
       "verified": true,
       "note": "Russian federal oil and gas budget revenue, September 2026 (RUB 452.4 bn). Used only as a sanity check.",
-      "source": { "label": "Ukrainska Pravda, 5 Oct 2026", "url": "https://www.pravda.com.ua/eng/news/2026/10/05/8056530/" }
+      "source": {
+        "label": "Ukrainska Pravda, 5 Oct 2026",
+        "url": "https://www.pravda.com.ua/eng/news/2026/10/05/8056530/"
+      }
     }
   },
   "drones": {
@@ -143,29 +180,213 @@
       "unit": "USD",
       "verified": true,
       "note": "Production cost estimate for a Russian-built Geran-2 (Shahed-136).",
-      "source": { "label": "Institute for Science and International Security, via DroneXL", "url": "https://dronexl.co/2026/04/29/russia-shahed-drones-teen-alabuga/" }
+      "source": {
+        "label": "Institute for Science and International Security, via DroneXL",
+        "url": "https://dronexl.co/2026/04/29/russia-shahed-drones-teen-alabuga/"
+      }
     }
   },
   "harm": {
-    "referenceMonth": "June 2026",
-    "longRangeLaunches": {
-      "value": 5749,
-      "verified": true,
-      "note": "Drones launched at Ukraine in June 2026, Ukrainian Air Force data. Includes decoys, which lowers the per-launch ratio.",
-      "source": { "label": "AFP via Arab News, 1 Jul 2026", "url": "https://www.arabnews.pk/node/2649293" }
-    },
-    "longRangeKilled": {
-      "value": 126,
-      "verified": true,
-      "note": "Civilians killed by long-range missiles and drones in June 2026.",
-      "source": { "label": "UN HRMMU via Kyiv Independent", "url": "https://kyivindependent.com/june-deadliest-month-for-ukrainian-civilians-since-april-2022-u-n-says/" }
-    },
-    "longRangeInjured": {
-      "value": 907,
-      "verified": true,
-      "note": "Civilians injured by long-range missiles and drones in June 2026.",
-      "source": { "label": "UN HRMMU via Kyiv Independent", "url": "https://kyivindependent.com/june-deadliest-month-for-ukrainian-civilians-since-april-2022-u-n-says/" }
-    },
+    "note": "The casualty rate is pooled over every listed month that has both long-range casualties and a drone count. Months missing either are shown as pending and join automatically once filled.",
+    "months": [
+      {
+        "month": "2026-06",
+        "label": "June 2026",
+        "short": "June",
+        "killed": {
+          "value": 293,
+          "verified": true,
+          "source": {
+            "label": "UN HRMMU via Kyiv Independent",
+            "url": "https://kyivindependent.com/june-deadliest-month-for-ukrainian-civilians-since-april-2022-u-n-says/"
+          },
+          "note": "All civilians killed, all weapons."
+        },
+        "injured": {
+          "value": 1990,
+          "verified": true,
+          "source": {
+            "label": "UN HRMMU via Kyiv Independent",
+            "url": "https://kyivindependent.com/june-deadliest-month-for-ukrainian-civilians-since-april-2022-u-n-says/"
+          },
+          "note": "All civilians injured, all weapons."
+        },
+        "longRangeKilled": {
+          "value": 126,
+          "verified": true,
+          "source": {
+            "label": "UN HRMMU via Kyiv Independent",
+            "url": "https://kyivindependent.com/june-deadliest-month-for-ukrainian-civilians-since-april-2022-u-n-says/"
+          },
+          "note": "Killed by missiles and long-range drones."
+        },
+        "longRangeInjured": {
+          "value": 907,
+          "verified": true,
+          "source": {
+            "label": "UN HRMMU via Kyiv Independent",
+            "url": "https://kyivindependent.com/june-deadliest-month-for-ukrainian-civilians-since-april-2022-u-n-says/"
+          },
+          "note": "Injured by missiles and long-range drones."
+        },
+        "childrenKilled": {
+          "value": 7,
+          "verified": true,
+          "source": {
+            "label": "UN HRMMU via Humanitarian Media Hub",
+            "url": "https://hmh.news/en/35569/june-2026-saw-the-highest-number-of-civilian-casualties-in-ukraine-since-april-2022/"
+          },
+          "note": ""
+        },
+        "childrenInjured": {
+          "value": 116,
+          "verified": true,
+          "source": {
+            "label": "UN HRMMU via Humanitarian Media Hub",
+            "url": "https://hmh.news/en/35569/june-2026-saw-the-highest-number-of-civilian-casualties-in-ukraine-since-april-2022/"
+          },
+          "note": ""
+        },
+        "launches": {
+          "value": 5749,
+          "verified": true,
+          "source": {
+            "label": "Ukrainian Air Force data, AFP analysis",
+            "url": "https://www.arabnews.pk/node/2649293"
+          },
+          "note": "Drones launched, decoys included."
+        }
+      },
+      {
+        "month": "2026-07",
+        "label": "July 2026",
+        "short": "July",
+        "killed": {
+          "value": 437,
+          "verified": true,
+          "source": {
+            "label": "UN HRMMU via Interfax-Ukraine",
+            "url": "https://en.interfax.com.ua/news/general/1193045.html"
+          },
+          "note": "All civilians killed, all weapons."
+        },
+        "injured": {
+          "value": 2610,
+          "verified": true,
+          "source": {
+            "label": "UN HRMMU via Interfax-Ukraine",
+            "url": "https://en.interfax.com.ua/news/general/1193045.html"
+          },
+          "note": "All civilians injured, all weapons."
+        },
+        "longRangeKilled": {
+          "value": 183,
+          "verified": true,
+          "source": {
+            "label": "UN HRMMU via Interfax-Ukraine",
+            "url": "https://en.interfax.com.ua/news/general/1193045.html"
+          },
+          "note": "Killed by missiles and long-range drones."
+        },
+        "longRangeInjured": {
+          "value": 967,
+          "verified": true,
+          "source": {
+            "label": "UN HRMMU via Interfax-Ukraine",
+            "url": "https://en.interfax.com.ua/news/general/1193045.html"
+          },
+          "note": "Injured by missiles and long-range drones."
+        },
+        "childrenKilled": {
+          "value": 17,
+          "verified": true,
+          "source": {
+            "label": "UN HRMMU via UNICEF",
+            "url": "https://www.unicef.org/press-releases/children-killed-and-injured-latest-attacks-across-ukraine-monthly-child-casualties"
+          },
+          "note": ""
+        },
+        "childrenInjured": {
+          "value": 166,
+          "verified": true,
+          "source": {
+            "label": "UN HRMMU via UNICEF",
+            "url": "https://www.unicef.org/press-releases/children-killed-and-injured-latest-attacks-across-ukraine-monthly-child-casualties"
+          },
+          "note": ""
+        },
+        "launches": {
+          "value": 8653,
+          "verified": true,
+          "source": {
+            "label": "Ministry of Defence of Ukraine via Kyiv Post",
+            "url": "https://www.kyivpost.com/post/83568"
+          },
+          "note": "Drones launched; type split not published."
+        }
+      },
+      {
+        "month": "2026-08",
+        "label": "August 2026",
+        "short": "August",
+        "killed": {
+          "value": 372,
+          "verified": true,
+          "source": {
+            "label": "UN HRMMU via UNN",
+            "url": "https://unn.ua/en/news/how-many-civilians-in-ukraine-were-killed-due-to-russias-aggression-in-august-the-un-announced-the-number-of-casualties"
+          },
+          "note": "All civilians killed, all weapons."
+        },
+        "injured": {
+          "value": 2349,
+          "verified": true,
+          "source": {
+            "label": "UN HRMMU via UNN",
+            "url": "https://unn.ua/en/news/how-many-civilians-in-ukraine-were-killed-due-to-russias-aggression-in-august-the-un-announced-the-number-of-casualties"
+          },
+          "note": "All civilians injured, all weapons."
+        },
+        "longRangeKilled": {
+          "value": 175,
+          "verified": false,
+          "derived": true,
+          "source": {
+            "label": "UN HRMMU via UNN",
+            "url": "https://unn.ua/en/news/how-many-civilians-in-ukraine-were-killed-due-to-russias-aggression-in-august-the-un-announced-the-number-of-casualties"
+          },
+          "note": "Derived: HRMMU says long-range weapons caused 47% of casualties but gives no killed/injured split."
+        },
+        "longRangeInjured": {
+          "value": 1104,
+          "verified": false,
+          "derived": true,
+          "source": {
+            "label": "UN HRMMU via UNN",
+            "url": "https://unn.ua/en/news/how-many-civilians-in-ukraine-were-killed-due-to-russias-aggression-in-august-the-un-announced-the-number-of-casualties"
+          },
+          "note": "Derived: 47% of injured, same caveat."
+        },
+        "childrenKilled": {
+          "value": null,
+          "verified": false,
+          "source": null,
+          "note": "Not published by HRMMU for August."
+        },
+        "childrenInjured": {
+          "value": null,
+          "verified": false,
+          "source": null,
+          "note": "Not published by HRMMU for August."
+        },
+        "launches": {
+          "value": null,
+          "verified": false,
+          "source": null,
+          "note": "No Ukrainian monthly drone total found for August (the MoD summary lists glide bombs and engagements only)."
+        }
+      }
+    ],
     "droneShare": {
       "value": 0.45,
       "low": 0.3,
@@ -173,26 +394,6 @@
       "verified": false,
       "note": "Share of long-range casualties attributed to drones rather than missiles. HRMMU does not publish this split. Assumption.",
       "source": null
-    },
-    "childShareKilled": {
-      "value": 0.0239,
-      "verified": true,
-      "note": "7 of 293 civilians killed in June 2026 were children (all weapons).",
-      "source": { "label": "UN HRMMU via Humanitarian Media Hub", "url": "https://hmh.news/en/35569/june-2026-saw-the-highest-number-of-civilian-casualties-in-ukraine-since-april-2022/" }
-    },
-    "childShareInjured": {
-      "value": 0.0583,
-      "verified": true,
-      "note": "116 of 1,990 civilians injured in June 2026 were children (all weapons).",
-      "source": { "label": "UN HRMMU via Humanitarian Media Hub", "url": "https://hmh.news/en/35569/june-2026-saw-the-highest-number-of-civilian-casualties-in-ukraine-since-april-2022/" }
-    },
-    "latestMonth": {
-      "label": "August 2026",
-      "killed": 372,
-      "injured": 2349,
-      "verified": true,
-      "note": "All civilian casualties verified by HRMMU in August 2026, all weapons.",
-      "source": { "label": "UN HRMMU via Ukrainska Pravda", "url": "https://www.pravda.com.ua/eng/news/2026/10/04/8056350/" }
     }
   }
 }

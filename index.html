@@ -31,6 +31,10 @@
         </fieldset>
       </form>
 
+      <p class="sign__label">
+        <span data-bind="priceLabel">Pump price today</span>
+        <s class="sign__list" data-bind="listPrice"></s>
+      </p>
       <p class="sign__price" aria-live="polite">
         <span class="sign__currency" data-bind="currency">€</span><span class="sign__digits" data-bind="price">2.10</span>
         <span class="sign__unit" data-bind="unit">per litre</span>
@@ -43,10 +47,11 @@
 
     <section class="pump" aria-labelledby="slider-label">
       <label id="slider-label" class="pump__label" for="saving">Make it cheaper</label>
-      <input id="saving" class="pump__slider" type="range" min="0" max="63" step="1" value="0"
+      <input id="saving" class="pump__slider" type="range" min="0" max="63" step="1" value="63"
              aria-describedby="saving-text">
+      <div class="pump__scale" aria-hidden="true"><span>Cheaper</span><span>Today's price</span></div>
       <p id="saving-text" class="pump__saving" aria-live="polite">
-        <strong data-bind="perUnit">Drag to save</strong>
+        <strong data-bind="perUnit">Drag left to save</strong>
         <span data-bind="perTank"></span>
       </p>
       <p class="pump__how">

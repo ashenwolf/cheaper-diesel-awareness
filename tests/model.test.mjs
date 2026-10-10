@@ -6,6 +6,7 @@ import {
   crudeDropPerBarrel,
   extraSupplyNeeded,
   harmFromRevenue,
+  poolHarm,
   revenueDeltaPerMonth,
   runRange,
   uralsDiscount,
@@ -76,9 +77,37 @@ test("sanity: central revenue stays below one month of actual Russian oil and ga
   assert.ok(central.revenue < params.russia.oilGasRevenueMonth.value);
 });
 
+test("pooling averages only months with both casualties and a drone count", () => {
+  const pooled = poolHarm(params.harm.months);
+  close(pooled.launches, (5749 + 8653) / 2);
+  close(pooled.killedRef, (126 + 183) / 2);
+  close(pooled.injuredRef, (907 + 967) / 2);
+  close(pooled.childShareKilled, (7 + 17) / (293 + 437));
+  assert.equal(pooled.period, "June to July 2026");
+  assert.deepEqual(pooled.pending, ["August 2026"]);
+});
+
+test("a month joins the average as soon as its drone count is filled in", () => {
+  const months = params.harm.months.map((m) =>
+    m.month === "2026-08" ? { ...m, launches: { value: 7000 } } : m,
+  );
+  const pooled = poolHarm(months);
+  assert.equal(pooled.period, "June to August 2026");
+  assert.deepEqual(pooled.pending, []);
+});
+
+test("the sign shows the buying price after the discount", () => {
+  const view = buildView(params, { regionId: "eu", fuel: "diesel", steps: 10 });
+  assert.equal(view.sign.price, (params.regions.eu.prices.diesel.value - 0.10).toFixed(2));
+  assert.equal(view.sign.discounted, true);
+  assert.equal(buildView(params, { regionId: "eu", fuel: "diesel", steps: 0 }).sign.discounted, false);
+});
+
+const observedDroneToll = () => poolHarm(params.harm.months).killedRef * params.harm.droneShare.value;
+
 test("display rule: casualty lines never show more than the observed drone toll", () => {
   const view = buildView(params, { regionId: "eu", fuel: "diesel", steps: 30 });
-  const observed = Math.round(params.harm.longRangeKilled.value * params.harm.droneShare.value);
+  const observed = Math.round(observedDroneToll());
   const killedLine = view.lines.find((line) => line.label.startsWith("Civilians killed"));
   const numbers = killedLine.value.replace(/,/g, "").match(/\d+(\.\d+)?/g).map(Number);
   assert.ok(Math.max(...numbers) <= observed, killedLine.value);
@@ -86,9 +115,7 @@ test("display rule: casualty lines never show more than the observed drone toll"
 
 test("display rule also caps child casualties at the observed child toll", () => {
   const view = buildView(params, { regionId: "eu", fuel: "diesel", steps: 30 });
-  const observedChildren = Math.round(
-    params.harm.longRangeKilled.value * params.harm.droneShare.value * params.harm.childShareKilled.value,
-  );
+  const observedChildren = Math.round(observedDroneToll() * poolHarm(params.harm.months).childShareKilled);
   const childLine = view.lines.find((line) => line.label === "Of them, children killed");
   const numbers = childLine.value.match(/\d+(\.\d+)?/g).map(Number);
   assert.ok(Math.max(...numbers) <= observedChildren, childLine.value);
