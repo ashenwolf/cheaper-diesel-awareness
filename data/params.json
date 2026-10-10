@@ -1,0 +1,198 @@
+{
+  "version": "2026-10-10",
+  "regions": {
+    "eu": {
+      "label": "EU average",
+      "locale": "en-IE",
+      "currency": "EUR",
+      "unit": "L",
+      "unitsPerBarrel": 158.987,
+      "tankSize": 50,
+      "step": 0.01,
+      "vat": {
+        "value": 0.21,
+        "verified": false,
+        "note": "Approximate average standard VAT rate across EU member states. Applied once to the whole pump price.",
+        "source": null
+      },
+      "fx": {
+        "value": 1.16,
+        "verified": false,
+        "note": "Approximate USD per EUR, October 2026. Replace with the ECB reference rate on each data refresh.",
+        "source": null
+      },
+      "prices": {
+        "diesel": {
+          "value": 2.10,
+          "asOf": "2026-10-05",
+          "verified": true,
+          "note": "Simple average of 27 national averages, EU Weekly Oil Bulletin.",
+          "source": { "label": "fuel-prices.eu, from the EC Weekly Oil Bulletin", "url": "https://www.fuel-prices.eu/news/weekly/europe-fuel-prices-week-2026-10-05/" }
+        },
+        "petrol": {
+          "value": 1.93,
+          "asOf": "2026-10-05",
+          "verified": true,
+          "note": "Euro-super 95, simple average of 27 national averages, EU Weekly Oil Bulletin.",
+          "source": { "label": "fuel-prices.eu, from the EC Weekly Oil Bulletin", "url": "https://www.fuel-prices.eu/news/weekly/europe-fuel-prices-week-2026-10-05/" }
+        }
+      }
+    },
+    "us": {
+      "label": "US average",
+      "locale": "en-US",
+      "currency": "USD",
+      "unit": "gal",
+      "unitsPerBarrel": 42,
+      "tankSize": 13,
+      "step": 0.05,
+      "vat": { "value": 0, "verified": true, "note": "US fuel taxes are per gallon, so they drop out of the change.", "source": null },
+      "fx": { "value": 1, "verified": true, "note": "Prices are already in USD.", "source": null },
+      "prices": {
+        "diesel": {
+          "value": 6.29,
+          "asOf": "2026-09-30",
+          "verified": true,
+          "note": "No. 2 diesel, September 2026 monthly average, an all-time high.",
+          "source": { "label": "US Bureau of Transportation Statistics", "url": "https://www.bts.gov/newsroom/motor-fuel-prices-september-2026-0" }
+        },
+        "petrol": {
+          "value": 4.36,
+          "asOf": "2026-09-30",
+          "verified": true,
+          "note": "Regular gasoline, September 2026 monthly average.",
+          "source": { "label": "US Bureau of Transportation Statistics", "url": "https://www.bts.gov/newsroom/motor-fuel-prices-september-2026-0" }
+        }
+      }
+    }
+  },
+  "oil": {
+    "brent": {
+      "value": 100,
+      "verified": false,
+      "note": "Approximate Brent price around 9 October 2026, read from a prediction market, not a settlement. Replace with an EIA or ICE settlement.",
+      "source": { "label": "Kalshi Brent market, 9 Oct 2026", "url": "https://kalshi.com/markets/kxbrentw/brent-oil/kxbrentw-26oct0917" }
+    },
+    "worldSupply": {
+      "value": 104,
+      "unit": "mb/d",
+      "verified": false,
+      "note": "Approximate global oil supply. Replace with the latest IEA Oil Market Report figure.",
+      "source": null
+    },
+    "priceFlexibility": {
+      "value": 12,
+      "low": 8,
+      "high": 20,
+      "verified": false,
+      "note": "Short-run % change in crude price per 1% change in supply, the inverse of a short-run demand elasticity of about 0.05 to 0.12. Assumption; the model is most sensitive to this.",
+      "source": null
+    }
+  },
+  "russia": {
+    "exports": {
+      "value": 5.163,
+      "unit": "mb/d",
+      "verified": true,
+      "note": "Seaborne crude 4.088 + seaborne products 1.075 mb/d, September 2026. Pipeline exports are excluded for lack of a sourced figure. They would also earn less at a lower world price, so leaving them out overstates the revenue gain somewhat.",
+      "source": { "label": "S&P Global, 5 Oct 2026", "url": "https://www.spglobal.com/energy/en/news-research/latest-news/refined-products/100526-russia-september-crude-exports-rise-8-on-month-despite-fresh-sanctions" }
+    },
+    "discountNow": {
+      "value": 22,
+      "unit": "$/bbl",
+      "verified": true,
+      "note": "Urals discount to Brent assumed in the Russian Economy Ministry 2026 scenario.",
+      "source": { "label": "Expert.ru", "url": "https://expert.ru/analitika/tarifnye-voiny/pochemu-skidka-na-rossiyskuyu-neft-brent-vyrosla-vyshe-20" }
+    },
+    "discountRelief": {
+      "value": 13.4,
+      "unit": "$/bbl",
+      "verified": true,
+      "note": "Actual average Urals discount in 2025, used as the discount after sanctions relief.",
+      "source": { "label": "Expert.ru", "url": "https://expert.ru/analitika/tarifnye-voiny/pochemu-skidka-na-rossiyskuyu-neft-brent-vyrosla-vyshe-20" }
+    },
+    "maxExtraSupply": {
+      "value": 1.5,
+      "low": 1.0,
+      "high": 2.0,
+      "unit": "mb/d",
+      "verified": false,
+      "note": "How much extra oil Russia could realistically put on the market. Production was about 10.4 mb/d in September 2026. Assumption.",
+      "source": null
+    },
+    "stateTake": {
+      "value": 0.35,
+      "low": 0.25,
+      "high": 0.5,
+      "verified": false,
+      "note": "Share of export value that ends up in the Russian federal budget as extraction tax and other levies. Assumption; to be replaced with KSE Institute or CREA estimates.",
+      "source": null
+    },
+    "oilGasRevenueMonth": {
+      "value": 5.43e9,
+      "verified": true,
+      "note": "Russian federal oil and gas budget revenue, September 2026 (RUB 452.4 bn). Used only as a sanity check.",
+      "source": { "label": "Ukrainska Pravda, 5 Oct 2026", "url": "https://www.pravda.com.ua/eng/news/2026/10/05/8056530/" }
+    }
+  },
+  "drones": {
+    "unitCost": {
+      "value": 50000,
+      "low": 35000,
+      "high": 80000,
+      "unit": "USD",
+      "verified": true,
+      "note": "Production cost estimate for a Russian-built Geran-2 (Shahed-136).",
+      "source": { "label": "Institute for Science and International Security, via DroneXL", "url": "https://dronexl.co/2026/04/29/russia-shahed-drones-teen-alabuga/" }
+    }
+  },
+  "harm": {
+    "referenceMonth": "June 2026",
+    "longRangeLaunches": {
+      "value": 5749,
+      "verified": true,
+      "note": "Drones launched at Ukraine in June 2026, Ukrainian Air Force data. Includes decoys, which lowers the per-launch ratio.",
+      "source": { "label": "AFP via Arab News, 1 Jul 2026", "url": "https://www.arabnews.pk/node/2649293" }
+    },
+    "longRangeKilled": {
+      "value": 126,
+      "verified": true,
+      "note": "Civilians killed by long-range missiles and drones in June 2026.",
+      "source": { "label": "UN HRMMU via Kyiv Independent", "url": "https://kyivindependent.com/june-deadliest-month-for-ukrainian-civilians-since-april-2022-u-n-says/" }
+    },
+    "longRangeInjured": {
+      "value": 907,
+      "verified": true,
+      "note": "Civilians injured by long-range missiles and drones in June 2026.",
+      "source": { "label": "UN HRMMU via Kyiv Independent", "url": "https://kyivindependent.com/june-deadliest-month-for-ukrainian-civilians-since-april-2022-u-n-says/" }
+    },
+    "droneShare": {
+      "value": 0.45,
+      "low": 0.3,
+      "high": 0.6,
+      "verified": false,
+      "note": "Share of long-range casualties attributed to drones rather than missiles. HRMMU does not publish this split. Assumption.",
+      "source": null
+    },
+    "childShareKilled": {
+      "value": 0.0239,
+      "verified": true,
+      "note": "7 of 293 civilians killed in June 2026 were children (all weapons).",
+      "source": { "label": "UN HRMMU via Humanitarian Media Hub", "url": "https://hmh.news/en/35569/june-2026-saw-the-highest-number-of-civilian-casualties-in-ukraine-since-april-2022/" }
+    },
+    "childShareInjured": {
+      "value": 0.0583,
+      "verified": true,
+      "note": "116 of 1,990 civilians injured in June 2026 were children (all weapons).",
+      "source": { "label": "UN HRMMU via Humanitarian Media Hub", "url": "https://hmh.news/en/35569/june-2026-saw-the-highest-number-of-civilian-casualties-in-ukraine-since-april-2022/" }
+    },
+    "latestMonth": {
+      "label": "August 2026",
+      "killed": 372,
+      "injured": 2349,
+      "verified": true,
+      "note": "All civilian casualties verified by HRMMU in August 2026, all weapons.",
+      "source": { "label": "UN HRMMU via Ukrainska Pravda", "url": "https://www.pravda.com.ua/eng/news/2026/10/04/8056350/" }
+    }
+  }
+}

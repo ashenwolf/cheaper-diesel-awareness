@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cheaper Diesel</title>
+  <meta name="description" content="Drag the slider to make fuel cheaper by letting Russian oil back in. Then read the receipt.">
+  <meta property="og:title" content="Cheaper Diesel">
+  <meta property="og:description" content="Drag the slider to make fuel cheaper. Then read the receipt.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#1F4FA3">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/barlow-condensed-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="forecourt">
+    <section class="sign" aria-labelledby="sign-title">
+      <h1 id="sign-title" class="sign__brand">Cheaper Diesel</h1>
+
+      <form class="sign__controls" aria-label="Choose region and fuel">
+        <fieldset class="toggle">
+          <legend class="visually-hidden">Region</legend>
+          <label><input type="radio" name="region" value="eu" checked><span>EU</span></label>
+          <label><input type="radio" name="region" value="us"><span>US</span></label>
+        </fieldset>
+        <fieldset class="toggle">
+          <legend class="visually-hidden">Fuel</legend>
+          <label><input type="radio" name="fuel" value="diesel" checked><span>Diesel</span></label>
+          <label><input type="radio" name="fuel" value="petrol"><span>Petrol</span></label>
+        </fieldset>
+      </form>
+
+      <p class="sign__price" aria-live="polite">
+        <span class="sign__currency" data-bind="currency">€</span><span class="sign__digits" data-bind="price">2.10</span>
+        <span class="sign__unit" data-bind="unit">per litre</span>
+      </p>
+      <p class="sign__source">
+        <span data-bind="regionLabel">EU average</span>, week of <span data-bind="asOf">5 October 2026</span>.
+        Source: <a data-bind="source" href="#">loading</a>
+      </p>
+    </section>
+
+    <section class="pump" aria-labelledby="slider-label">
+      <label id="slider-label" class="pump__label" for="saving">Make it cheaper</label>
+      <input id="saving" class="pump__slider" type="range" min="0" max="63" step="1" value="0"
+             aria-describedby="saving-text">
+      <p id="saving-text" class="pump__saving" aria-live="polite">
+        <strong data-bind="perUnit">Drag to save</strong>
+        <span data-bind="perTank"></span>
+      </p>
+      <p class="pump__how">
+        The quickest way to cheaper fuel this year has been letting more Russian oil onto the market.
+        Here is what that discount costs.
+      </p>
+    </section>
+
+    <section class="receipt" aria-labelledby="receipt-title" data-state="empty">
+      <div class="receipt__paper">
+        <h2 id="receipt-title" class="receipt__title">Receipt</h2>
+        <p class="receipt__meta">Cheaper Diesel Ltd. Payment received by the Russian Federation.</p>
+        <p class="receipt__empty">Nothing bought yet. Move the slider.</p>
+        <dl class="receipt__lines" aria-live="polite"></dl>
+        <ul class="receipt__notes"></ul>
+        <p class="receipt__footer">Low to high estimates. No refunds.</p>
+      </div>
+    </section>
+
+    <nav class="actions" aria-label="Next steps">
+      <button type="button" class="actions__share" data-action="share">Share your receipt</button>
+      <a class="actions__link" href="methodology.html">How we counted this</a>
+      <a class="actions__link" href="https://u24.gov.ua/" rel="noopener">Help Ukraine instead</a>
+    </nav>
+    <p class="toast" role="status" hidden></p>
+  </main>
+
+  <footer class="colophon">
+    <p>
+      Satire with sourced numbers. Casualty figures come from the UN Human Rights Monitoring Mission in Ukraine.
+      Every assumption is listed on the <a href="methodology.html">methodology page</a>. No cookies, no tracking.
+    </p>
+  </footer>
+
+  <template id="line-template">
+    <div class="receipt__line">
+      <dt></dt>
+      <dd></dd>
+    </div>
+  </template>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>

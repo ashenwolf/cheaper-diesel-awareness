@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How we counted</title>
+  <meta name="description" content="Formulas, sources and assumptions behind the Cheaper Diesel calculator.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="paper-page">
+    <p><a href="./">Back to the calculator</a></p>
+    <h1>How we counted</h1>
+    <p>
+      The calculator chains five steps. Each step is simple; the uncertainty is in the inputs, so every derived number
+      is shown as a range. The low end uses the cautious bound of every uncertain input, the high end the other bound.
+      Where we had to assume, the table below says so.
+    </p>
+
+    <h2>1. Pump saving to crude price</h2>
+    <p>
+      We assume taxes, refining and retail margins stay fixed, so the whole saving has to come from cheaper crude.
+      In reality margins absorb part of any crude drop, so this understates how much oil is needed.
+    </p>
+    <p class="formula">crude drop ($/bbl) = saving / (1 + VAT) x USD per local currency x units per barrel</p>
+
+    <h2>2. Crude price to extra supply</h2>
+    <p class="formula">extra supply = world supply x (crude drop / Brent) / price flexibility</p>
+    <p>
+      Price flexibility is the % change in price for a 1% change in supply. The result is capped at what Russia could
+      realistically add. Past the cap, the receipt says the rest of the discount needs someone else's oil.
+    </p>
+
+    <h2>3. Extra supply to Russian state revenue</h2>
+    <p class="formula">revenue = state take x 30 x [(exports + extra) x (Brent - drop - discount') - exports x (Brent - discount)]</p>
+    <p>
+      Cheaper oil also means Russia earns less on barrels it already sells, and the formula nets that out. Sanctions
+      relief narrows the Urals discount; we move it from the current level toward the 2025 average in proportion to how
+      much extra Russian oil is let in. Only the state's share counts, not the full sale price.
+    </p>
+
+    <h2>4. Revenue to drones</h2>
+    <p class="formula">drones = revenue / unit cost of one Geran-2 (Shahed-136)</p>
+    <p>
+      Russia's drone output is limited by factories, not only by cash, and money is fungible across its war budget.
+      So the receipt says the money is enough to pay for these drones, not that Russia will buy exactly these drones.
+    </p>
+
+    <h2>5. Drones to civilian casualties</h2>
+    <p class="formula">casualties = drones x long-range casualties x drone share / drones launched</p>
+    <p>
+      The UN monitoring mission reports missiles and long-range drones as one category and does not attribute casualties
+      to individual weapons. We split that category with an assumed drone share and divide by drones launched that month,
+      decoys included, which lowers the ratio. Child figures apply the month's child share to the result.
+    </p>
+    <p>
+      Display rule: when the upper estimate would exceed the toll drones actually caused that month, the receipt stops
+      at the real toll and marks it with a plus sign. A linear forecast above observed reality is not evidence.
+    </p>
+
+    <h2>Every input</h2>
+    <p>Yellow means an assumption or an unverified approximation. Green means taken from the linked source.</p>
+    <div class="table-wrap">
+      <table class="params">
+        <thead>
+          <tr><th scope="col">Input</th><th scope="col">Value</th><th scope="col">Status</th><th scope="col">Note and source</th></tr>
+        </thead>
+        <tbody id="param-rows"></tbody>
+      </table>
+    </div>
+
+    <h2>Known weaknesses</h2>
+    <ul>
+      <li>The result is most sensitive to price flexibility and state take, the two least certain inputs.</li>
+      <li>
+        Russian exports count seaborne crude and products only. Pipeline barrels would also lose value when world prices
+        fall, so including them would lower the revenue estimate. This is the main way the model could overstate.
+      </li>
+      <li>Casualty data lags by about two weeks, so the reference month is not the current month.</li>
+      <li>The Ukrainian Air Force reports drones of all types together, including decoys.</li>
+      <li>Prices are averages. Your local pump will differ.</li>
+    </ul>
+
+    <h2>Corrections</h2>
+    <p>
+      Found an error? Open an issue in this site's GitHub repository with a source. Every parameter change is a reviewed
+      commit, so the history of each number is public.
+    </p>
+    <p>Parameter set version: <span id="param-version">loading</span>.</p>
+  </main>
+  <script type="module" src="src/methodology.js"></script>
+</body>
+</html>

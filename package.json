@@ -1,0 +1,14 @@
+{
+  "name": "cheaper-diesel",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Satirical calculator: what cheaper fuel from Russian oil costs Ukraine.",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "start": "python3 -m http.server 8080"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

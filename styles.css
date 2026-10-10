@@ -1,0 +1,542 @@
+@font-face {
+  font-family: "Barlow Condensed";
+  src: url("assets/fonts/barlow-condensed-latin-600-normal.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Barlow Condensed";
+  src: url("assets/fonts/barlow-condensed-latin-700-normal.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Barlow";
+  src: url("assets/fonts/barlow-latin-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Barlow";
+  src: url("assets/fonts/barlow-latin-600-normal.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Courier Prime";
+  src: url("assets/fonts/courier-prime-latin-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Courier Prime";
+  src: url("assets/fonts/courier-prime-latin-700-normal.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+
+:root {
+  --concrete: #dfe3e6;
+  --paper: #fbfcfa;
+  --ink: #1c2127;
+  --ink-soft: #545c66;
+  --sign-blue: #1f4fa3;
+  --sign-blue-deep: #173b7a;
+  --signal-yellow: #f5c518;
+  --harm: #b3261e;
+  --focus: #f5c518;
+
+  --font-sign: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-body: "Barlow", "Helvetica Neue", Arial, sans-serif;
+  --font-receipt: "Courier Prime", "Courier New", monospace;
+
+  --step--1: 0.875rem;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: 1.6rem;
+  --step-5: clamp(5rem, 22vw, 8.5rem);
+  --column: 34rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--concrete);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: 1.5;
+}
+
+a {
+  color: inherit;
+  text-underline-offset: 0.15em;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.forecourt {
+  max-width: var(--column);
+  margin: 0 auto;
+  padding: 1.5rem 1rem 0;
+}
+
+/* The price sign: the one loud thing on the page. */
+.sign {
+  background: var(--sign-blue);
+  color: #fff;
+  border-radius: 6px;
+  padding: 1.25rem 1.25rem 1rem;
+  box-shadow: inset 0 0 0 4px var(--sign-blue-deep);
+}
+
+.sign__brand {
+  margin: 0;
+  font-family: var(--font-sign);
+  font-weight: 600;
+  font-size: var(--step-2);
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+}
+
+.sign__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.9rem 0 0.25rem;
+}
+
+.toggle {
+  display: inline-flex;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--sign-blue-deep);
+}
+
+.toggle input {
+  position: absolute;
+  opacity: 0;
+}
+
+.toggle span {
+  display: block;
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  font-family: var(--font-sign);
+  font-weight: 600;
+  font-size: var(--step-1);
+  cursor: pointer;
+}
+
+.toggle input:checked + span {
+  background: var(--signal-yellow);
+  color: var(--ink);
+}
+
+.toggle input:focus-visible + span {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+
+.sign__price {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  margin: 0;
+  font-family: var(--font-sign);
+  font-weight: 700;
+  color: var(--signal-yellow);
+  line-height: 0.95;
+}
+
+.sign__currency {
+  font-size: calc(var(--step-5) * 0.45);
+  margin-right: 0.08em;
+}
+
+.sign__digits {
+  font-size: var(--step-5);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.sign__unit {
+  margin-left: 0.6rem;
+  font-size: var(--step-1);
+  font-weight: 600;
+  color: #fff;
+}
+
+.sign__source {
+  margin: 0.5rem 0 0;
+  font-size: var(--step--1);
+  color: #d6e0f5;
+}
+
+/* The slider. */
+.pump {
+  padding: 1.5rem 0 0.5rem;
+}
+
+.pump__label {
+  display: block;
+  font-family: var(--font-sign);
+  font-weight: 700;
+  font-size: var(--step-2);
+  line-height: 1.1;
+}
+
+.pump__slider {
+  --fill: 0%;
+  width: 100%;
+  margin: 0.9rem 0 0.4rem;
+  height: 2.75rem;
+  background: transparent;
+  appearance: none;
+  cursor: pointer;
+}
+
+.pump__slider::-webkit-slider-runnable-track {
+  height: 0.75rem;
+  border-radius: 999px;
+  background: linear-gradient(to right, var(--ink) var(--fill), #b9c0c7 var(--fill));
+}
+
+.pump__slider::-moz-range-track {
+  height: 0.75rem;
+  border-radius: 999px;
+  background: #b9c0c7;
+}
+
+.pump__slider::-moz-range-progress {
+  height: 0.75rem;
+  border-radius: 999px;
+  background: var(--ink);
+}
+
+.pump__slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-top: -0.875rem;
+  border-radius: 50%;
+  background: var(--signal-yellow);
+  border: 3px solid var(--ink);
+}
+
+.pump__slider::-moz-range-thumb {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--signal-yellow);
+  border: 3px solid var(--ink);
+}
+
+.pump__saving {
+  margin: 0;
+  font-size: var(--step-1);
+  min-height: 2em;
+}
+
+.pump__saving span {
+  display: block;
+  font-size: var(--step-0);
+  color: var(--ink-soft);
+}
+
+.pump__how {
+  margin: 0.75rem 0 0;
+  max-width: 60ch;
+  color: var(--ink-soft);
+}
+
+/* The receipt: thermal paper with a torn bottom edge. */
+.receipt {
+  margin: 1.25rem 0 0;
+  filter: drop-shadow(0 6px 10px rgb(28 33 39 / 0.18));
+}
+
+.receipt__paper {
+  background: var(--paper);
+  padding: 1.5rem 1.25rem 2.25rem;
+  font-family: var(--font-receipt);
+  font-size: var(--step--1);
+  line-height: 1.45;
+  mask:
+    conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 14px 100%;
+}
+
+.receipt__title {
+  margin: 0;
+  font-family: var(--font-receipt);
+  font-size: var(--step-1);
+  font-weight: 700;
+  text-align: center;
+}
+
+.receipt__meta {
+  margin: 0.25rem 0 1rem;
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+.receipt__empty {
+  margin: 0;
+  padding: 1.5rem 0;
+  text-align: center;
+  border-top: 1px dashed var(--ink-soft);
+  border-bottom: 1px dashed var(--ink-soft);
+}
+
+.receipt[data-state="printed"] .receipt__empty {
+  display: none;
+}
+
+.receipt__lines {
+  margin: 0;
+}
+
+.receipt__line {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.45rem 0;
+  border-top: 1px dashed #c3c8cd;
+}
+
+.receipt__line:first-child {
+  border-top: 1px dashed var(--ink-soft);
+}
+
+.receipt__line dt {
+  flex: 1 1 auto;
+}
+
+.receipt__line dd {
+  margin: 0;
+  font-weight: 700;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.receipt__line[data-tone="loud"] {
+  font-size: var(--step-0);
+  border-top: 2px solid var(--ink);
+  padding-top: 0.6rem;
+}
+
+.receipt__line[data-tone="harm"] dd {
+  color: var(--harm);
+}
+
+.receipt__notes {
+  margin: 0.9rem 0 0;
+  padding: 0.75rem 0 0;
+  list-style: none;
+  border-top: 2px solid var(--ink);
+}
+
+.receipt__notes:empty {
+  display: none;
+}
+
+.receipt__notes li + li {
+  margin-top: 0.5rem;
+}
+
+.receipt__footer {
+  margin: 1.25rem 0 0;
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+.receipt[data-state="printed"] .receipt__paper {
+  animation: print 700ms steps(14, end);
+}
+
+@keyframes print {
+  from {
+    clip-path: inset(0 0 85% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .receipt[data-state="printed"] .receipt__paper {
+    animation: none;
+  }
+}
+
+/* Actions. */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  padding: 1.5rem 0 0;
+}
+
+.actions__share {
+  font: 600 var(--step-0) / 1 var(--font-body);
+  padding: 0.85rem 1.25rem;
+  border: 0;
+  border-radius: 6px;
+  background: var(--ink);
+  color: #fff;
+  cursor: pointer;
+}
+
+.actions__share:hover {
+  background: var(--sign-blue);
+}
+
+.actions__link {
+  font-weight: 600;
+}
+
+.toast {
+  margin: 0.75rem 0 0;
+  font-weight: 600;
+}
+
+.colophon {
+  max-width: var(--column);
+  margin: 0 auto;
+  padding: 2rem 1rem 3rem;
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+}
+
+/* Methodology page. */
+.paper-page {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 2rem 1rem 3rem;
+}
+
+.paper-page h1 {
+  font-family: var(--font-sign);
+  font-weight: 700;
+  font-size: 2.6rem;
+  line-height: 1.05;
+  margin: 0 0 0.75rem;
+}
+
+.paper-page h2 {
+  font-family: var(--font-sign);
+  font-weight: 600;
+  font-size: var(--step-2);
+  line-height: 1.15;
+  margin: 2rem 0 0.5rem;
+}
+
+.paper-page p,
+.paper-page li {
+  max-width: 68ch;
+}
+
+.formula {
+  font-family: var(--font-receipt);
+  background: var(--paper);
+  padding: 0.75rem 1rem;
+  border-left: 4px solid var(--sign-blue);
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.params {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--step--1);
+  background: var(--paper);
+}
+
+.params th,
+.params td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid #c3c8cd;
+}
+
+.params td:nth-child(2) {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.05rem 0.45rem;
+  border-radius: 999px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge[data-verified="true"] {
+  background: #dce8d6;
+}
+
+.badge[data-verified="false"] {
+  background: #f8e3a3;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+@media (max-width: 40rem) {
+  .params thead {
+    position: absolute;
+    clip-path: inset(50%);
+  }
+
+  .params tr {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.25rem 0.75rem;
+    padding: 0.75rem 0.6rem;
+    border-bottom: 1px solid #c3c8cd;
+  }
+
+  .params th,
+  .params td {
+    padding: 0;
+    border: 0;
+  }
+
+  .params td:nth-child(2) {
+    grid-column: 1;
+  }
+
+  .params td:nth-child(3) {
+    grid-row: 1;
+    grid-column: 2;
+  }
+
+  .params td:nth-child(4) {
+    grid-column: 1 / -1;
+    color: var(--ink-soft);
+  }
+}
